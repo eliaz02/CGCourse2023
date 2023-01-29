@@ -33,6 +33,10 @@
 
 # vs settings
 .vs/
-
 3dparty/
 
+*.idb
+*.pdb
+*.log
+*.tlog
+*.lastbuildstate
