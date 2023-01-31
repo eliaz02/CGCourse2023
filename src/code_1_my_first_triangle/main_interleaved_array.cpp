@@ -35,34 +35,35 @@ int main(void)
 							0.5, 0.0,  // 2nd vertex
 							0.5, 0.5
 	};
-	/* create a buffer for the render data in video RAM */
-	GLuint positionsBuffer;
-	glGenBuffers(1, &positionsBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, positionsBuffer);
-
-	/* declare what data in RAM are filling the bufferin video RAM */
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6, positions, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(positionAttribIndex);
-
-	/* specify the data format */
-	glVertexAttribPointer(positionAttribIndex, 2, GL_FLOAT, false, 0, 0);
 
 	GLuint colorAttribIndex = 1;
 	float colors[] = {	1.0, 0.0, 0.0,  // 1st vertex
 						0.0, 1.0, 0.0,  // 2nd vertex
 						0.0, 0.0, 1.0
 	};
-	/* create a buffer for the render data in video RAM */
-	GLuint colorsBuffer;
-	glGenBuffers(1, &colorsBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, colorsBuffer);
 
-	/* declare what data in RAM are filling the bufferin video RAM */
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 9, colors, GL_STATIC_DRAW);
+	GLuint positionColorBuffer;
+	glCreateBuffers(1, &positionColorBuffer);
+
+	std::vector<float> pc_buf;
+	for (int i = 0; i < 3; ++i) {
+		pc_buf.push_back(positions[i * 2]);
+		pc_buf.push_back(positions[i * 2 + 1]);
+		pc_buf.push_back(colors[i * 3]);
+		pc_buf.push_back(colors[i * 3+1]);
+		pc_buf.push_back(colors[i * 3+2]);
+	}
+	
+	glBindBuffer(GL_ARRAY_BUFFER, positionColorBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 15, &pc_buf[0], GL_STATIC_DRAW);
+	
+	glEnableVertexAttribArray(positionAttribIndex);
 	glEnableVertexAttribArray(colorAttribIndex);
-
-	/* specify the data format */
-	glVertexAttribPointer(colorAttribIndex, 3, GL_FLOAT, false, 0, 0);
+	check_gl_errors(__LINE__, __FILE__);
+	
+	glVertexAttribPointer(positionAttribIndex, 2, GL_FLOAT, false, 20, 0);
+	glVertexAttribPointer(colorAttribIndex, 3, GL_FLOAT, false, 20, (void*)8);
+	check_gl_errors(__LINE__, __FILE__);
 
 /*  \BEGIN IGNORATE DA QUI IN POI */
 	/* create a vertex shader */
