@@ -3,69 +3,65 @@
 #include <string>
 #include <iostream>
 #include "..\common\debugging.h"
- 
+
 
 int main(void)
 {
-    GLFWwindow* window;
+	GLFWwindow* window;
 
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
+	/* Initialize the library */
+	if (!glfwInit())
+		return -1;
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(1000, 800, "code_1_my_first_triangle", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
+	/* Create a windowed mode window and its OpenGL context */
+	window = glfwCreateWindow(1000, 800, "code_1_my_first_triangle", NULL, NULL);
+	if (!window)
+	{
+		glfwTerminate();
+		return -1;
+	}
 
-    
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
 
-    glewInit();
+	/* Make the window's context current */
+	glfwMakeContextCurrent(window);
 
-    printout_opengl_glsl_info();
+	glewInit();
+
+	printout_opengl_glsl_info();
 
 	/* create render data in RAM */
 	GLuint positionAttribIndex = 0;
-	float positions[] = {	0.0, 0.0,  // 1st vertex
+	float positions[] = { 0.0, 0.0,  // 1st vertex
 							0.5, 0.0,  // 2nd vertex
 							0.5, 0.5
+	};
+
+	GLuint colorAttribIndex = 1;
+	float colors[] = { 1.0, 0.0, 0.0,  // 1st vertex
+						0.0, 1.0, 0.0,  // 2nd vertex
+						0.0, 0.0, 1.0
 	};
 	/* create a buffer for the render data in video RAM */
 	GLuint positionsBuffer;
 	glCreateBuffers(1, &positionsBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, positionsBuffer);
-
+		
 	/* declare what data in RAM are filling the bufferin video RAM */
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6, positions, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(positionAttribIndex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (6 + 9), NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER,0, sizeof(float) * 6, positions);
+	glBufferSubData(GL_ARRAY_BUFFER, sizeof(float) * 6, sizeof(float) * 9, colors);
 
+	glEnableVertexAttribArray(positionAttribIndex);
 	/*specify the data format */
 	glVertexAttribPointer(positionAttribIndex, 2, GL_FLOAT, false, 0, 0);
 
-	GLuint colorAttribIndex = 1;
-	float colors[] = {	1.0, 0.0, 0.0,  // 1st vertex
-						0.0, 1.0, 0.0,  // 2nd vertex
-						0.0, 0.0, 1.0
-	};
-	/* create a buffer for the render data in video RAM */
-	GLuint colorsBuffer;
-	glCreateBuffers(1, &colorsBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, colorsBuffer);
 
-	/* declare what data in RAM are filling the bufferin video RAM */
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 9, colors, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(colorAttribIndex);
+	/*specify the data format */
+	glVertexAttribPointer(colorAttribIndex, 3, GL_FLOAT, false, 0, (void*)(sizeof(float) * 6));
 
-	/* specify the data format */
-	glVertexAttribPointer(colorAttribIndex, 3, GL_FLOAT, false, 0, 0);
-
-/*  \BEGIN IGNORATE DA QUI IN POI */
-	/* create a vertex shader */
+	/*  \BEGIN IGNORATE DA QUI IN POI */
+		/* create a vertex shader */
 	std::string  vertex_shader_src = "#version 330\n \
         in vec2 aPosition;\
         in vec3 aColor;\
@@ -102,14 +98,14 @@ int main(void)
 	glBindAttribLocation(program_shader, positionAttribIndex, "aPosition");
 	glBindAttribLocation(program_shader, colorAttribIndex, "aColor");
 	glLinkProgram(program_shader);
-/*  \END IGNORATE  */
+	/*  \END IGNORATE  */
 
 
-	/* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
-    {
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+		/* Loop until the user closes the window */
+	while (!glfwWindowShouldClose(window))
+	{
+		/* Render here */
+		glClear(GL_COLOR_BUFFER_BIT);
 
 		glUseProgram(program_shader);
 
@@ -117,13 +113,13 @@ int main(void)
 
 		glUseProgram(0);
 
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
+		/* Swap front and back buffers */
+		glfwSwapBuffers(window);
 
-        /* Poll for and process events */
-        glfwPollEvents();
-    }
+		/* Poll for and process events */
+		glfwPollEvents();
+	}
 
-    glfwTerminate();
-    return 0;
+	glfwTerminate();
+	return 0;
 }
