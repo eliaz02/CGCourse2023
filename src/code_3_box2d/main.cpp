@@ -15,7 +15,7 @@ renderable r;
 void create_box2d(int nx, int ny) {
 }
 
-int main(void)
+int main1(void)
 {
     GLFWwindow* window;
 

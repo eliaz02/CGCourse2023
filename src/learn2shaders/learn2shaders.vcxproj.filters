@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\code_1_my_first_triangle\main.cpp">
+    <ClCompile Include="..\code_3_box2d\main_create_box2d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

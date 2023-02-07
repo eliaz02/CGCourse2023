@@ -31,21 +31,21 @@ int main(void)
 
     /* create render data in RAM */
     GLuint positionAttribIndex = 0;
-    float positions[] = {   -0, -0.0,	// 1st vertex
-                            0.5, -0.0,  // 2nd vertex
+    float positions[] = {   0, 0.0,	// 1st vertex
+                            0.5, 0.0,  // 2nd vertex
                             0.5, 0.5,	// 3nd vertex
                             0.0, 0.5    // 4th vertex
     };
-    renderable r;
+    renderable r;   
     r.create();
 
 	r.add_vertex_attribute<float>(positions, 8, positionAttribIndex, 2);
 	check_gl_errors(__LINE__, __FILE__);
 
     GLuint colorAttribIndex = 1;
-    float colors[] =      { 1.0, 0.0, 0.0,  // 1st vertex
+    float colors[] =      { 0.0, 1.0, 1.0,  // 1st vertex
                             0.0, 1.0, 0.0,  // 2nd vertex
-                            0.0, 0.0, 1.0,  // 3rd vertex
+                            1.0, 0.0, 1.0,  // 3rd vertex
                             1.0, 1.0, 1.0   // 4th vertex
     };
     r.add_vertex_attribute<float>(colors, 12, colorAttribIndex, 3);
@@ -66,17 +66,17 @@ int main(void)
 
 	r.bind();
 
-	int it = 0;
+	int it = 1;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-		it++;
+        it++;
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(basic_shader.pr);
 
        /* update the value of uDelta in the fragment shader */
-		glUniform1f(basic_shader["uDelta"], (it % 100) / 200.0);
+		glUniform1f(basic_shader["uDelta"],(it%100)/200.0);
 
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL);
         check_gl_errors(__LINE__,__FILE__);

@@ -12,15 +12,35 @@ renderable r;
 	of nx by ny quadrilateral, each made of two triangles. 
 */
 void create_box2d(int nx, int ny) {
-	float positions[] = { -0.1, -0.1,	// 1st vertex
-		0.1, -0.1,  // 2nd vertex
-		0.1, 0.1,	// 3nd vertex
-		-0.1, 0.1    // 4th vertex
-	};
-	unsigned int ind[] = { 0,1,2,0,2,3 };
-	r.create();
-	r.add_vertex_attribute<float>(positions, sizeof(float) * 8, 0, 2);
-	r.add_indices(ind, sizeof(unsigned int) *6, GL_TRIANGLES);
+    GLuint positionAttribIndex = 0;
+    if (nx == 1 && ny == 1)
+    {
+        float positions[] = {
+            -0.1, -0.1,	// 1st vertex
+            0.1, -0.1,  // 2nd vertex
+            0.1, 0.1,	// 3nd vertex
+            -0.1, 0.1   // 4th vertex
+        };
+        unsigned int ind[] = { 0,1,2,0,2,3 };
+        r.create();
+        r.add_vertex_attribute<float>(positions, sizeof(float) * 8, 0, 2);
+        r.add_indices(ind, sizeof(unsigned int) * 6, GL_TRIANGLES);
+    }
+    if (nx == 2 && ny == 1)
+    {
+        float positions[] = {
+            -0.1, -0.1,	// 0st vertex
+            0.0,-0.1,   // 1
+            0.1, -0.1,  // 2nd vertex
+            0.1, 0.1,	// 3nd vertex
+            0.0, 0.1,   // 4
+            -0.1, 0.1   // 5th vertex
+        };
+        unsigned int ind[] = { 0,1,4,0,5,4,1,2,3,1,4,3};
+        r.create();
+        r.add_vertex_attribute<float>(positions, sizeof(float) * 1, 0, 2);
+        r.add_indices(ind, sizeof(unsigned int) * 6, GL_TRIANGLES);
+    }
 }
 
 int main(void)
@@ -49,7 +69,7 @@ int main(void)
 
     printout_opengl_glsl_info();
 
-	create_box2d(1, 1);
+	create_box2d(2, 1);
 	r.bind();
 
     /* Loop until the user closes the window */
@@ -59,7 +79,7 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
 		/* here the call to render the box --*/
-		glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 		/* -------------------------------------*/
 		
 		/* Swap front and back buffers */
