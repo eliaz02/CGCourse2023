@@ -6,12 +6,6 @@
 #include "..\common\renderable.h"
 #include "..\common\shaders.h"
 #include "..\common\simple_shapes.h"
-
-/* 
-GLM library for math  https://github.com/g-truc/glm 
-it's a header-only library. You can just copy the folder glm into 3dparty
-and set the path properly. 
-*/
 #include <glm/glm.hpp>  
 #include <glm/ext.hpp>  
 
